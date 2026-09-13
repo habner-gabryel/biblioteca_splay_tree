@@ -291,3 +291,72 @@ void splay_pre_ordem(const SplayTree *arv, splay_visitor_fn v, void *ctx)
 
 void splay_pos_ordem(const SplayTree *arv, splay_visitor_fn v, void *ctx)
 { if (arv) pos_ordem_rec(arv->raiz, v, ctx); }
+
+/* ---------------- Fase 6 ---------------- */
+
+static int checar_bst_rec(const SplayNode *no, long min, long max, int tem_min, int tem_max)
+{
+    if (!no) return 1;
+    if (tem_min && no->chave <= min) return 0;
+    if (tem_max && no->chave >= max) return 0;
+    return checar_bst_rec(no->esq, min, no->chave, tem_min, 1)
+        && checar_bst_rec(no->dir, no->chave, max, 1, tem_max);
+}
+
+int splay_checar_bst(const SplayTree *arv)
+{
+    if (!arv) return 1;
+    return checar_bst_rec(arv->raiz, 0, 0, 0, 0);
+}
+
+static int checar_pais_rec(const SplayNode *no)
+{
+    if (!no) return 1;
+    if (no->esq && no->esq->pai != no) return 0;
+    if (no->dir && no->dir->pai != no) return 0;
+    return checar_pais_rec(no->esq) && checar_pais_rec(no->dir);
+}
+
+int splay_checar_pais(const SplayTree *arv)
+{
+    if (!arv) return 1;
+    if (arv->raiz && arv->raiz->pai != NULL) return 0;
+    return checar_pais_rec(arv->raiz);
+}
+
+/* Contador de alocação (valgrind caseiro) */
+static long alocacoes_ativas = 0;
+
+static void teste_estresse(void)
+{
+    SplayTree *t = splay_criar();
+    srand(42);
+
+    for (int i = 0; i < 10000; i++) {
+        splay_inserir(t, rand() % 100000);
+        assert(splay_checar_bst(t));
+        assert(splay_checar_pais(t));
+    }
+    for (int i = 0; i < 5000; i++) {
+        splay_buscar(t, rand() % 100000);
+    }
+    for (int i = 0; i < 5000; i++) {
+        splay_remover(t, rand() % 100000);
+        assert(splay_checar_bst(t));
+        assert(splay_checar_pais(t));
+    }
+
+    printf("[OK] estresse (tamanho final = %zu, altura = %d)\n",
+           splay_tamanho(t), splay_altura(t));
+    splay_liberar(t);
+}
+
+static void teste_ordenado_nao_degenera(void)
+{
+    SplayTree *t = splay_criar();
+    for (int i = 1; i <= 1000; i++) splay_inserir(t, i);
+    int h = splay_altura(t);
+    assert(h < 100); /* sem splay, seria 999 */
+    printf("[OK] inserir ordenado: altura = %d (esperado < 100)\n", h);
+    splay_liberar(t);
+}

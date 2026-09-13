@@ -132,6 +132,26 @@ static void teste_inserir_buscar_remover(void)
     printf("[OK] inserir / buscar / remover\n");
 }
 
+static void imprimir_chave(int chave, void *ctx)
+{
+    (void)ctx;
+    printf("%d ", chave);
+}
+
+static void teste_percursos(void)
+{
+    SplayTree *t = splay_criar();
+    int v[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int i = 0; i < 7; i++) splay_inserir(t, v[i]);
+
+    printf("em ordem : "); splay_em_ordem (t, imprimir_chave, NULL); printf("\n");
+    printf("pre ordem: "); splay_pre_ordem(t, imprimir_chave, NULL); printf("\n");
+    printf("pos ordem: "); splay_pos_ordem(t, imprimir_chave, NULL); printf("\n");
+
+    splay_liberar(t);
+    printf("[OK] percursos\n");
+}
+
 int main(void)
 {
     printf("=== Testes Fase 1 ===\n");
