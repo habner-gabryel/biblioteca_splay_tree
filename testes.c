@@ -152,6 +152,10 @@ static void teste_percursos(void)
     printf("[OK] percursos\n");
 }
 
+static long g_aloc = 0;
+static void *meu_malloc(size_t n) { g_aloc++; return malloc(n); }
+static void  meu_free(void *p)    { if (p) { g_aloc--; free(p); } }
+
 int main(void)
 {
     printf("=== Testes Fase 1 ===\n");
