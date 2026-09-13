@@ -132,3 +132,70 @@ void splay(SplayTree *arv, SplayNode *x)
         }
     }
 }
+
+/* ---------------- Fase 3 ---------------- */
+
+int splay_inserir(SplayTree *arv, int chave)
+{
+    SplayNode *n = splay_criar_no(chave);
+    if (!n) return 0;
+
+    if (!arv->raiz) {
+        arv->raiz = n;
+        arv->tamanho = 1;
+        return 1;
+    }
+
+    SplayNode *atual = arv->raiz;
+    while (1) {
+        if (chave < atual->chave) {
+            if (!atual->esq) { atual->esq = n; n->pai = atual; break; }
+            atual = atual->esq;
+        } else if (chave > atual->chave) {
+            if (!atual->dir) { atual->dir = n; n->pai = atual; break; }
+            atual = atual->dir;
+        } else {
+            free(n);
+            splay(arv, atual);
+            return 0;
+        }
+    }
+    arv->tamanho++;
+    splay(arv, n);
+    return 1;
+}
+
+SplayNode *splay_buscar(SplayTree *arv, int chave)
+{
+    SplayNode *atual = arv->raiz;
+    while (atual && atual->chave != chave) {
+        atual = (chave < atual->chave) ? atual->esq : atual->dir;
+    }
+    if (atual) splay(arv, atual);
+    return atual;
+}
+
+int splay_remover(SplayTree *arv, int chave)
+{
+    SplayNode *n = splay_buscar(arv, chave);
+    if (!n) return 0;
+
+    SplayNode *esq = n->esq;
+    SplayNode *dir = n->dir;
+    if (esq) esq->pai = NULL;
+    if (dir) dir->pai = NULL;
+    free(n);
+    arv->tamanho--;
+
+    if (!esq) {
+        arv->raiz = dir;
+    } else {
+        arv->raiz = esq;
+        SplayNode *max_esq = esq;
+        while (max_esq->dir) max_esq = max_esq->dir;
+        splay(arv, max_esq);
+        arv->raiz->dir = dir;
+        if (dir) dir->pai = arv->raiz;
+    }
+    return 1;
+}

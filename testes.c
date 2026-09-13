@@ -111,6 +111,27 @@ static void teste_splay_zig_zag(void)
     printf("[OK] splay caso ZIG-ZAG\n");
 }
 
+static void teste_inserir_buscar_remover(void)
+{
+    SplayTree *t = splay_criar();
+    int v[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int i = 0; i < 7; i++) splay_inserir(t, v[i]);
+    assert(splay_tamanho(t) == 7);
+    assert(t->raiz->chave == 80); /* último inserido subiu */
+
+    SplayNode *b = splay_buscar(t, 40);
+    assert(b != NULL && b->chave == 40);
+    assert(t->raiz == b);
+
+    assert(splay_buscar(t, 999) == NULL);
+    assert(splay_remover(t, 30) == 1);
+    assert(splay_tamanho(t) == 6);
+    assert(splay_remover(t, 999) == 0);
+
+    splay_liberar(t);
+    printf("[OK] inserir / buscar / remover\n");
+}
+
 int main(void)
 {
     printf("=== Testes Fase 1 ===\n");
