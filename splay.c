@@ -199,3 +199,60 @@ int splay_remover(SplayTree *arv, int chave)
     }
     return 1;
 }
+
+/* ---------------- Fase 4 ---------------- */
+
+SplayNode *splay_minimo(SplayTree *arv)
+{
+    if (!arv->raiz) return NULL;
+    SplayNode *n = arv->raiz;
+    while (n->esq) n = n->esq;
+    splay(arv, n);
+    return n;
+}
+
+SplayNode *splay_maximo(SplayTree *arv)
+{
+    if (!arv->raiz) return NULL;
+    SplayNode *n = arv->raiz;
+    while (n->dir) n = n->dir;
+    splay(arv, n);
+    return n;
+}
+
+SplayNode *splay_predecessor(SplayTree *arv, int chave)
+{
+    SplayNode *n = splay_buscar(arv, chave);
+    if (!n) return NULL;
+    if (n->esq) {
+        SplayNode *p = n->esq;
+        while (p->dir) p = p->dir;
+        return p;
+    }
+    return NULL;
+}
+
+SplayNode *splay_sucessor(SplayTree *arv, int chave)
+{
+    SplayNode *n = splay_buscar(arv, chave);
+    if (!n) return NULL;
+    if (n->dir) {
+        SplayNode *s = n->dir;
+        while (s->esq) s = s->esq;
+        return s;
+    }
+    return NULL;
+}
+
+static int altura_rec(const SplayNode *no)
+{
+    if (!no) return -1;
+    int he = altura_rec(no->esq);
+    int hd = altura_rec(no->dir);
+    return 1 + (he > hd ? he : hd);
+}
+
+int splay_altura(const SplayTree *arv)
+{
+    return arv ? altura_rec(arv->raiz) : -1;
+}
