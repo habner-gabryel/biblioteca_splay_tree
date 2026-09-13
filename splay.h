@@ -28,17 +28,12 @@ typedef void (*splay_visitor_fn)(int chave, void *ctx);
 
 /* ---------- Fase 1: ciclo de vida ---------- */
 
-/* Cria uma árvore vazia. Retorna NULL em falha de alocação. */
 SplayTree *splay_criar(void);
-
-/* Libera todos os nós e a estrutura. Aceita NULL. */
 void       splay_liberar(SplayTree *arv);
-
-/* Retorna 1 se a árvore está vazia (ou é NULL), 0 caso contrário. */
 int        splay_vazia(const SplayTree *arv);
-
-/* Número de nós na árvore (0 se NULL). */
 size_t     splay_tamanho(const SplayTree *arv);
+SplayNode *splay_criar_no(int chave);
+void       splay_debug_imprimir(const SplayTree *arv);
 
 /* ---------- Fase 2: rotações e splay ---------- */
 
