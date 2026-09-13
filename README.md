@@ -4,7 +4,9 @@ Implementação de uma Splay Tree (árvore binária auto-ajustável) em C.
 
 ## Estrutura
 
-- `splay.c` — código completo (tipos, funções, testes, main)
+- `splay.h` — tipos
+- `splay.c` — funções
+- `testes.c` — testes e main
 - `README.md` — este arquivo
 
 ## Decisões
