@@ -256,3 +256,38 @@ int splay_altura(const SplayTree *arv)
 {
     return arv ? altura_rec(arv->raiz) : -1;
 }
+
+/* ---------------- Fase 5 ---------------- */
+
+static void em_ordem_rec(const SplayNode *no, splay_visitor_fn visit, void *ctx)
+{
+    if (!no) return;
+    em_ordem_rec(no->esq, visit, ctx);
+    visit(no->chave, ctx);
+    em_ordem_rec(no->dir, visit, ctx);
+}
+
+static void pre_ordem_rec(const SplayNode *no, splay_visitor_fn visit, void *ctx)
+{
+    if (!no) return;
+    visit(no->chave, ctx);
+    pre_ordem_rec(no->esq, visit, ctx);
+    pre_ordem_rec(no->dir, visit, ctx);
+}
+
+static void pos_ordem_rec(const SplayNode *no, splay_visitor_fn visit, void *ctx)
+{
+    if (!no) return;
+    pos_ordem_rec(no->esq, visit, ctx);
+    pos_ordem_rec(no->dir, visit, ctx);
+    visit(no->chave, ctx);
+}
+
+void splay_em_ordem (const SplayTree *arv, splay_visitor_fn v, void *ctx)
+{ if (arv) em_ordem_rec (arv->raiz, v, ctx); }
+
+void splay_pre_ordem(const SplayTree *arv, splay_visitor_fn v, void *ctx)
+{ if (arv) pre_ordem_rec(arv->raiz, v, ctx); }
+
+void splay_pos_ordem(const SplayTree *arv, splay_visitor_fn v, void *ctx)
+{ if (arv) pos_ordem_rec(arv->raiz, v, ctx); }
