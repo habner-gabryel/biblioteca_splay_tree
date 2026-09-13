@@ -164,5 +164,35 @@ int main(void)
     teste_null_safe();
     teste_estrutura_manual();
     printf("\nFase 1 concluida.\n");
+
+    printf("\n=== Testes Fase 2 ===\n");
+    teste_splay_zig();
+    teste_splay_zig_zig();
+    teste_splay_zig_zag();
+    printf("\nFase 2 concluida.\n");
+
+    printf("\n=== Testes Fase 3 ===\n");
+    teste_inserir_buscar_remover();
+    printf("\nFase 3 concluida.\n");
+
+    printf("\n=== Testes Fase 4 ===\n");
+    teste_minimo();
+    teste_maximo();
+    teste_predecessor();
+    teste_sucessor();
+    teste_altura();
+    printf("\nFase 4 concluida.\n");
+
+    printf("\n=== Testes Fase 5 ===\n");
+    teste_percursos();
+    printf("\nFase 5 concluida.\n");
+
+    printf("\n=== Testes Fase 6 ===\n");
+    teste_checar_bst();
+    teste_checar_pais();
+    teste_estresse();
+    teste_ordenado_nao_degenera();
+    printf("\nFase 6 concluida.\n");
+
     return 0;
 }
